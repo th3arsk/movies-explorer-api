@@ -7,7 +7,6 @@ const cors = require('cors');
 const { PORT, DB_ADRESS } = process.env;
 const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { NotFoundError } = require('./errors/NotFoundError');
 
 const { signIn, signUp } = require('./controllers/users');
 const { validateSignIn, validateSignUp } = require('./middlewares/validation');
@@ -25,10 +24,6 @@ app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
-});
-
-app.use('*', (req, res, next) => {
-  next(new NotFoundError('Маршрут не найден'));
 });
 
 app.post('/signin', validateSignIn, signIn);
