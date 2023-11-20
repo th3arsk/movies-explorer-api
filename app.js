@@ -32,7 +32,7 @@ app.use(auth, router);
 
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Маршрут не найден'));
-}); 
+});
 
 app.use(errorLogger);
 app.use(errors());
