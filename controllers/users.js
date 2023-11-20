@@ -1,7 +1,7 @@
-const User = require('../models/user');
+const User = require('../models/user.js');
 
-const NotFoundError = require('../errors/NotFoundError');
-const ValidationError = require('../errors/ValidationError');
+const NotFoundError = require('../errors/NotFoundError.js');
+const ValidationError = require('../errors/ValidationError.js');
 
 const changeUserInfo = (req, res, next) => {
   const { name, email } = req.body;

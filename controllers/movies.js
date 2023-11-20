@@ -1,8 +1,8 @@
-const Movie = require('../models/movie');
+const Movie = require('../models/movie.js');
 
-const ValidationError = require('../errors/ValidationError');
-const NotFoundError = require('../errors/NotFoundError');
-const AccessError = require('../errors/AccessError');
+const ValidationError = require('../errors/ValidationError.js');
+const NotFoundError = require('../errors/NotFoundError.js');
+const AccessError = require('../errors/AccessError.js');
 
 const postMovie = (req, res, next) => {
   const {

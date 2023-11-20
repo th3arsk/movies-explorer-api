@@ -1,18 +1,18 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const helmet = require('helmet');
+require('dotenv').config();
 
 const { PORT = 3003, DB_ADRESS = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-const NotFoundError = require('./errors/NotFoundError');
+const NotFoundError = require('./errors/NotFoundError.js');
 
 const auth = require('./middlewares/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-const errorHandler = require('./middlewares/errorHandler');
+const { requestLogger, errorLogger } = require('./middlewares/logger.js');
+const errorHandler = require('./middlewares/errorHandler.js');
 
-const { authRouter, router } = require('./routes/index');
+const { authRouter, router } = require('./routes/index.js');
 
 const app = express();
 app.use(express.json());

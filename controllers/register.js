@@ -1,12 +1,12 @@
-const User = require('../models/user');
+const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 
-const ConflictError = require('../errors/ConflictError');
-const NotFoundError = require('../errors/NotFoundError');
-const ValidationError = require('../errors/ValidationError');
+const ConflictError = require('../errors/ConflictError.js');
+const NotFoundError = require('../errors/NotFoundError.js');
+const ValidationError = require('../errors/ValidationError.js');
 
 const signUp = (req, res, next) => {
   const {

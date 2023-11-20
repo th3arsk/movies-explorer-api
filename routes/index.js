@@ -7,11 +7,11 @@ const {
   validateChangeUserInfo,
   validateSignIn,
   validateSignUp
-} = require('../middlewares/validation');
+} = require('../middlewares/validation.js');
 
-const { postMovie, deleteMovie, getUserMovies } = require('../controllers/movies');
-const { changeUserInfo, getMe } = require('../controllers/users');
-const { signIn, signUp } = require('../controllers/register');
+const { postMovie, deleteMovie, getUserMovies } = require('../controllers/movies.js');
+const { changeUserInfo, getMe } = require('../controllers/users.js');
+const { signIn, signUp } = require('../controllers/register.js');
 
 router.post('/movies', validateCreateMovie, postMovie );
 router.delete('/movies/:movieId', validateMovieId, deleteMovie );
