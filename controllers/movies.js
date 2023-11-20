@@ -16,6 +16,7 @@ const postMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
+    movieId,
   } = req.body;
 
   const owner = req.user._id;
@@ -32,6 +33,7 @@ const postMovie = (req, res, next) => {
     thumbnail,
     nameRU,
     nameEN,
+    movieId,
   })
   .then((movie) => res.status(201).send(movie))
   .catch((err) => {
@@ -62,7 +64,6 @@ const getUserMovies = (req, res, next) => {
   const userId = req.user._id;
 
   Movie.find({ owner: userId })
-    .orFail(new NotFoundError('Фильмы не найдены'))
     .then((userMovies) => {
       res.send(userMovies);
     })
