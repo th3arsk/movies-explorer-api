@@ -1,8 +1,10 @@
-const Movie = require('../models/movie.js');
+const Movie = require('../models/movie');
 
-const ValidationError = require('../errors/ValidationError.js');
-const NotFoundError = require('../errors/NotFoundError.js');
-const AccessError = require('../errors/AccessError.js');
+const ValidationError = require('../errors/ValidationError');
+const NotFoundError = require('../errors/NotFoundError');
+const AccessError = require('../errors/AccessError');
+
+const { validationErrMessage, accessErrMessage, notFoundMovie } = require('../utils/constants');
 
 const postMovie = (req, res, next) => {
   const {
@@ -35,26 +37,26 @@ const postMovie = (req, res, next) => {
     nameEN,
     movieId,
   })
-  .then((movie) => res.status(201).send(movie))
-  .catch((err) => {
-    if (err.name === 'ValidationError') {
-      next(new ValidationError('Некорректные данные'));
-    } else {
-      next(err);
-    }
-  });
+    .then((movie) => res.status(201).send(movie))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValidationError(validationErrMessage));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
 
   Movie.findById(movieId)
-    .orFail(new NotFoundError('Фильм с таким ID не найден'))
+    .orFail(new NotFoundError(notFoundMovie))
     .then((movie) => {
       if (movie.owner.toString() === req.user._id) {
         Movie.deleteOne(movie).then(res.json(movie));
       } else if (movie.owner !== req.user._id) {
-        throw new AccessError('Нет доступа');
+        throw new AccessError(accessErrMessage);
       }
     })
     .catch(next);
@@ -73,5 +75,5 @@ const getUserMovies = (req, res, next) => {
 module.exports = {
   postMovie,
   deleteMovie,
-  getUserMovies
+  getUserMovies,
 };

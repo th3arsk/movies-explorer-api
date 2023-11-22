@@ -1,12 +1,14 @@
-const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 
-const ConflictError = require('../errors/ConflictError.js');
-const NotFoundError = require('../errors/NotFoundError.js');
-const ValidationError = require('../errors/ValidationError.js');
+const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const ValidationError = require('../errors/ValidationError');
+
+const { validationErrMessage, conflictErrUser, notFoundUser } = require('../utils/constants');
 
 const signUp = (req, res, next) => {
   const {
@@ -29,9 +31,9 @@ const signUp = (req, res, next) => {
         }))
         .catch((err) => {
           if (err.name === 'ValidationError') {
-            next(new ValidationError('Некорректные данные'));
+            next(new ValidationError(validationErrMessage));
           } else if (err.code === 11000) {
-            next(new ConflictError('Такой пользователь уже существует'));
+            next(new ConflictError(conflictErrUser));
           } else {
             next(err);
           }
@@ -45,10 +47,10 @@ const signIn = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV ? JWT_SECRET : 'dev_secret', { expiresIn: '7d' });
-      res.status(200).send({ token, _id: user._id});
+      res.status(200).send({ token, _id: user._id });
 
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(notFoundUser);
       }
     })
     .catch(next);
@@ -58,4 +60,3 @@ module.exports = {
   signUp,
   signIn,
 };
-

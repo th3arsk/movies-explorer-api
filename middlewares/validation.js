@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-const regexp = /http[s]?:\/\/(www\.)?[\w\d\-\._~:\/?#\[\]@!\$'()*+,;=]+#?/im;
+const regexp = /http[s]?:\/\/(www\.)?[\w\d\-\._~:\/?#\[\]@!\$'()*+,;=]+#?/im; // eslint-disable-line
 
 const validateSignIn = celebrate({
   body: Joi.object().keys({

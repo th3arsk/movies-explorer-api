@@ -48,7 +48,7 @@ const movieSchema = new mongoose.Schema({
   movieId: {
     type: Number,
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('movie', movieSchema);

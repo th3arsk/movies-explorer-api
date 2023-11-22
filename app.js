@@ -5,14 +5,14 @@ const cors = require('cors');
 const helmet = require('helmet');
 require('dotenv').config();
 
-const { PORT = 3003, DB_ADRESS = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-const NotFoundError = require('./errors/NotFoundError.js');
+const DEFAULT_DB_ADRESS = require('./utils/config');
 
-const auth = require('./middlewares/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger.js');
-const errorHandler = require('./middlewares/errorHandler.js');
+const { PORT = 3003, DB_ADRESS = DEFAULT_DB_ADRESS } = process.env;
 
-const { authRouter, router } = require('./routes/index.js');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorHandler = require('./middlewares/errorHandler');
+
+const { router } = require('./routes/index');
 
 const app = express();
 app.use(express.json());
@@ -21,18 +21,7 @@ app.use(helmet());
 app.use(requestLogger);
 app.use(cors());
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
-app.use(authRouter);
-app.use(auth, router);
-
-app.use('*', (req, res, next) => {
-  next(new NotFoundError('Маршрут не найден'));
-});
+app.use(router);
 
 app.use(errorLogger);
 app.use(errors());

@@ -4,9 +4,9 @@
         "commonjs": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb-base",
     "parserOptions": {
-        "ecmaVersion": "latest"
+      "ecmaVersion": "latest"
     },
     "rules": {
       "no-underscore-dangle": ["error", { "allow": ["_id"]}]

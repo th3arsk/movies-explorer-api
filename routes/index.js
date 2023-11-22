@@ -1,30 +1,39 @@
 const router = require('express').Router();
-const authRouter = require('express').Router();
+
+const NotFoundError = require('../errors/NotFoundError');
+const auth = require('../middlewares/auth');
 
 const {
   validateCreateMovie,
   validateMovieId,
   validateChangeUserInfo,
   validateSignIn,
-  validateSignUp
-} = require('../middlewares/validation.js');
+  validateSignUp,
+} = require('../middlewares/validation');
 
-const { postMovie, deleteMovie, getUserMovies } = require('../controllers/movies.js');
-const { changeUserInfo, getMe } = require('../controllers/users.js');
-const { signIn, signUp } = require('../controllers/register.js');
+const { postMovie, deleteMovie, getUserMovies } = require('../controllers/movies');
+const { changeUserInfo, getMe } = require('../controllers/users');
+const { signIn, signUp } = require('../controllers/register');
+const { notFountRoute, crushServerMessage } = require('../utils/constants');
 
-router.post('/movies', validateCreateMovie, postMovie );
-router.delete('/movies/:movieId', validateMovieId, deleteMovie );
-router.get('/movies', getUserMovies );
+router.post('/movies', auth, validateCreateMovie, postMovie);
+router.delete('/movies/:movieId', auth, validateMovieId, deleteMovie);
+router.get('/movies', auth, getUserMovies);
 
-router.patch('/users/me', validateChangeUserInfo, changeUserInfo );
-router.get('/users/me', getMe );
+router.patch('/users/me', auth, validateChangeUserInfo, changeUserInfo);
+router.get('/users/me', auth, getMe);
 
-authRouter.post('/signin', validateSignIn, signIn);
-authRouter.post('/signup', validateSignUp, signUp);
+router.post('/signin', validateSignIn, signIn);
+router.post('/signup', validateSignUp, signUp);
 
-module.exports = { router, authRouter };
+router.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error(crushServerMessage);
+  }, 0);
+});
 
+router.use('*', (req, res, next) => {
+  next(new NotFoundError(notFountRoute));
+});
 
-
-
+module.exports = { router };
